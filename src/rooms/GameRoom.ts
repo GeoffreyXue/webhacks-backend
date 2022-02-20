@@ -31,7 +31,7 @@ export class GameRoom extends Room<RoomState> {
                 this.delayedInterval.clear();
                 this.state.gameState = GameState.Ended;
                 this.broadcast("game-end", this.state.gameState);
-                this.state.gameState = GameState.Waiting;
+                this.state.resetGame();
             }, 60_000);
         })
 

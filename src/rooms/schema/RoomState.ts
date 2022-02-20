@@ -75,6 +75,18 @@ export class RoomState extends Schema {
                 alternate = !alternate;
             }
         }
+    }
 
+    public resetGame() {
+        this.gameState = GameState.Waiting;
+        this.tileStates = new ArraySchema();
+        for (let i = 0; i < 10; i++) {
+            this.tileStates.push(new TileArray());
+            let alternate = false;
+            for (let j = 0; j < 10; j++) {
+                this.tileStates[i].tiles.push(new TileState(alternate ? TeamColor.Blue : TeamColor.Red));
+                alternate = !alternate;
+            }
+        }
     }
 }
