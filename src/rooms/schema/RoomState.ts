@@ -35,6 +35,17 @@ export class TileState extends Schema {
     }
 }
 
+export class TileArray extends Schema {
+    @type([TileState])
+    tiles: TileState[];
+
+    constructor() {
+        super();
+
+        this.tiles = [];
+    }
+}
+
 export enum GameState {
     Waiting,
     Playing,
@@ -42,27 +53,28 @@ export enum GameState {
 }
 
 export class RoomState extends Schema {
-  @type([PlayerState]) 
-  playerStates: PlayerState[];
+    @type([PlayerState]) 
+    playerStates: PlayerState[];
 
-  @type('number')
-  gameState: GameState;
+    @type('number')
+    gameState: GameState;
 
-  @type([TileState])
-  tileStates: TileState[][];
+    @type([TileArray])
+    tileStates: TileArray[];
 
-  constructor() {
-      super();
-      this.playerStates = new ArraySchema();
-      this.tileStates = new ArraySchema();
-      for (let i = 0; i < 10; i++) {
-        this.tileStates.push(new ArraySchema());
-        let alternate = false;
-        for (let j = 0; j < 10; j++) {
-            this.tileStates[i].push(new TileState(alternate ? TeamColor.Blue : TeamColor.Red));
-            alternate = !alternate;
+    constructor() {
+        super();
+        this.playerStates = new ArraySchema();
+        this.gameState = GameState.Waiting;
+        this.tileStates = new ArraySchema();
+        for (let i = 0; i < 10; i++) {
+            this.tileStates.push(new TileArray());
+            let alternate = false;
+            for (let j = 0; j < 10; j++) {
+                this.tileStates[i].tiles.push(new TileState(alternate ? TeamColor.Blue : TeamColor.Red));
+                alternate = !alternate;
+            }
         }
-      }
-  }
 
+    }
 }
